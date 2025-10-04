@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
-                        sh 'docker build -t vijay008/maven-project-"${env.BRANCH_NAME}":v$BUILD_NUMBER .'
+                        sh 'docker build -t vijay008/maven-project-${env.BRANCH_NAME}:v$BUILD_NUMBER .'
                     }
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
-                        sh 'docker push vijay008/maven-project-"${env.BRANCH_NAME}":v$BUILD_NUMBER'
+                        sh 'docker push vijay008/maven-project-${env.BRANCH_NAME}:v$BUILD_NUMBER'
                     }
                 }
             }
@@ -41,7 +41,7 @@ pipeline {
         stage('DEPLOY IMAGE') {
             steps {
                 sh 'docker stop demo-cont || true'
-                sh 'docker run --rm --name demo-cont -d -p 8585:8080 vijay008/maven-project-"${env.BRANCH_NAME}":v$BUILD_NUMBER'
+                sh 'docker run --rm --name demo-cont -d -p 8585:8080 vijay008/maven-project-${env.BRANCH_NAME}:v$BUILD_NUMBER'
             }
         }
     }
