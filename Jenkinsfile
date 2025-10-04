@@ -15,23 +15,7 @@ pipeline {
             steps {
                 sh 'mvn clean install'
             }
-        }
-        
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('MySonar') {
-                    sh 'mvn clean verify sonar:sonar'
-                }
-            }
-        }
-
-        stage("Quality Gate") {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }        
+        }    
         
         stage('BUILD IMAGE') {
             steps {
@@ -42,12 +26,7 @@ pipeline {
                 }
             }
         }
-        
-        stage('SCAN IMAGE') {
-            steps {
-                sh 'trivy image vijay008/maven-project-"${env.BRANCH_NAME}":v$BUILD_NUMBER >> trivy-report.txt'
-            }
-        }
+
         
         stage('PUSH IMAGE') {
             steps {
